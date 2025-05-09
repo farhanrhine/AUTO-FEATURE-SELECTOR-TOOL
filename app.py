@@ -1,6 +1,7 @@
 import streamlit as st
 from helper import *
 
+# Aim- 1
 def main():
     st.title("AUTO FEATURE SELECTOR TOOL")
 
@@ -13,4 +14,6 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+# Aim -2
 
