@@ -1,7 +1,8 @@
 import streamlit as st
 from helper import *
 
-# Aim- 1
+# Aim- 1. read any data
+
 def main():
     st.title("AUTO FEATURE SELECTOR TOOL")
 
