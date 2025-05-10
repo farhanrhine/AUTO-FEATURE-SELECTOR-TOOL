@@ -1,5 +1,8 @@
 import streamlit as st
 import pandas as pd
+from sklearn.impute import SimpleImputer
+from fancyimpute import IterativeImputer
+
 
 # 1. read any data
 
@@ -30,6 +33,54 @@ def analyze_csv_file(uploaded_file):
 
                     st.write('## woah! here is your DATASET after removing unwanted columns:')
                     st.write(df)
+
+# Aim- 3. show & handle missing or duplicate data
+
+        missing_value = df.isnull().sum()
+        these_has_missing_values = missing_value.sum()> 0
+
+        duplicate_count = df.duplicated().sum()
+        these_has_duplicateds_values = duplicate_count > 0
+
+        if these_has_missing_values or these_has_duplicateds_values:
+            st.warning(f"These are missing/duplicated values inside your dataset '(in your selected columns)' ",)
+
+            if these_has_missing_values:
+                st.write('### Missing values')
+                st.write(missing_value[missing_value > 0]) # show missing value in a table pandas i used
+# '''there are multiple types of handling missing values so i give some option to handle differnt kind of missing values and fill them '''
+# here loop running only column which have a missing value
+
+                # option to handling missing value
+                for column in missing_value[missing_value > 0].index: # this handle in a sequence with the help of index so , all missing values columns are handle by sequence .
+                    st.write(f"#### column: {column}")
+
+
+                    # option to remove missing value
+                if st.button(f"remove rows with missing value in {column}"):
+                    df = df.dropna(subset=[column])
+                    st.session_state['df']= df
+                    st.success(f" you bro ! All Row with missing values in '{column}' remove successfully.")
+
+
+                    # fill the missing vaule
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
