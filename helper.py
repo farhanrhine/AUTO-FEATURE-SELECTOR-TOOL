@@ -63,7 +63,87 @@ def analyze_csv_file(uploaded_file):
                     st.success(f" you bro ! All Row with missing values in '{column}' remove successfully.")
 
 
-                    # fill the missing vaule
+                    # fill the missing value with mean
+
+                if st.button(f"fill missing values in {column} with mean "):
+
+                   imputer = SimpleImputer(strategy='mean') 
+                   df[column] = imputer.fit_transform(df[[column]])
+
+                   st.session_state['df']=df
+                   st.success(f"Missing value in '{column}'filled with mean.") 
+
+                    # fill the missing value with median
+
+
+                if st.button(f"fill missing values in {column} with median "):
+
+                   imputer = SimpleImputer(strategy='median') 
+                   df[column] = imputer.fit_transform(df[[column]])
+
+                   st.session_state['df']=df
+                   st.success(f"Missing value in '{column}'filled with median.")
+
+
+                   # missing value with mode
+
+                if st.button(f"fill missing value in '{column}' filled with mode."):
+
+                    mode_value = df[column].mode()[0]
+                    df[column].fillna(mode_value,inplace=True)
+
+                    st.session_state['df']= df
+                    st.success(f"Missing values in '{column}' filled with mode. ")
+
+                    # fill custom value
+                    custom_value = st.text_input(f"custom value to fill missing values in '{column}'")
+                    if st.buttom(f"fill missing valies in'{column}' with custom value"):
+                        if custom_value:
+                            df[column].fillna(custom_value, inplace=True)
+                            st.session_state['df'] = df
+                            st.success(f"missing values in'{column}' filled with custom value.")
+                        else:
+                            st.warning('please provide a custom value.')
+                
+                    # Iterative Imputation (MICE)
+                    if st.button(f"Apply Iterative Imputation for '{column}'"):
+                        imputer = IterativeImputer()
+                        df_imputed = pd.DataFrame(imputer.fit_transform(df), columns=df.columns)
+                        st.session_state['df'] = df_imputed
+                        st.success(f"Iterative Imputation applied successfully.")
+        st.write(missing_value)
+
+
+        if these_has_duplicateds_values:
+                st.write("### Duplicate Values")
+                st.write(f"**Number of duplicate rows:** {duplicate_count}")
+                
+                if st.button("Remove Duplicate Rows"):
+                    df = df.drop_duplicates()
+                    st.session_state['df'] = df
+                    st.success("Duplicate rows removed successfully.")
+
+                    duplicate_count = df.duplicated().sum()
+                    st.write(duplicate_count)
+
+        show_details = st.checkbox("Show Details")
+
+        if show_details:
+            st.write("### Basic Information")
+            st.write(f"**Number of columns:** {df.shape[1]}")
+            st.write(f"**Column names:** {list(df.columns)}")
+
+            st.write("### Column Data Types")
+            st.write(df.dtypes)
+
+            st.write("### Missing Values")
+            st.write(missing_value[missing_value > 0])
+
+            st.write("### Duplicate Values")
+            st.write(f"**Number of duplicate rows:** {duplicate_count}")
+
+
+
 
 
 
